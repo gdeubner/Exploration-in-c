@@ -4,13 +4,18 @@
 
 bool isPrime(int);
 void truncPrime(int);
-
+void isTruncatablePrime(FILE*);
 
 int main(int argc, char**argv){
 	if(argc!=2)
 		return 0;
 	FILE* fp = fopen(argv[1],"r");
-	
+	isTruncatablePrime(fp);
+	fclose(fp);
+	return 0;
+}
+
+void isTruncatablePrime(FILE* fp){
 	int total;
 	fscanf(fp,"%d\n", &total);
 	for(int i=0; i<total;i++){
@@ -18,9 +23,8 @@ int main(int argc, char**argv){
 		fscanf(fp,"%d\n",&temp);
 		truncPrime(temp);
 	}
-	fclose(fp);
-	return 0;
 }
+
 bool isPrime(int num){
 	if(num==0||num==1)
 		return false;
