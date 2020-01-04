@@ -5,10 +5,12 @@
 bool isPrime(int);
 void truncPrime(int);
 
+
 int main(int argc, char**argv){
 	if(argc!=2)
 		return 0;
 	FILE* fp = fopen(argv[1],"r");
+	
 	int total;
 	fscanf(fp,"%d\n", &total);
 	for(int i=0; i<total;i++){
@@ -17,6 +19,7 @@ int main(int argc, char**argv){
 		truncPrime(temp);
 	}
 	fclose(fp);
+	return 0;
 }
 bool isPrime(int num){
 	if(num==0||num==1)
