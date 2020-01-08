@@ -1,11 +1,31 @@
+/*
+This project reads in two matrices from a text file, multiplies them, and
+prints out the result.
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 
-
 void printMatrix(int** mat, int rows, int cols);
 void multiply(int**, int**, int, int, int, int);
 void cleanMatrix(int**, int);
+int** initializeMatrix(int, int, FILE*);
+
+int** initializeMatrix(int rows, int cols, FILE* fp){
+	int** matrix = malloc(rows*sizeof(int*));
+	for(int i = 0; i<rows; i++)
+		matrix[i]=malloc(cols*sizeof(int ));
+	for(int i = 0; i<rows; i++){
+		for(int j = 0; j<cols; j++){
+			int num;
+			fscanf(fp, "%d", &num);
+			matrix[i][j]=num;
+		}
+		fscanf(fp, "\n");
+	}
+	return matrix;
+}
 
 void cleanMatrix(int** mat, int rows){
 	for(int i = 0; i<rows; i++){
@@ -38,7 +58,7 @@ void multiply(int** matA, int** matB, int rowsA, int colsA, int rowsB, int colsB
 	for(int i = 0; i<rowsC; i++){
 		for(int j = 0; j<colsC; j++){
 			int total=0;
-			
+
 			for(int k =0; k<colsA; k++){
 			 	total+= matA[i][k]*matB[k][j];
 			 }
@@ -49,48 +69,24 @@ void multiply(int** matA, int** matB, int rowsA, int colsA, int rowsB, int colsB
 	cleanMatrix(matC, rowsC);
 }
 
-
-
 int main(int argc, char** argv){
 	if(argc!=2){
 		exit(0);
 	}
 	FILE* fp = fopen(argv[1],"r");
 	int rowsA, colsA, rowsB, colsB;
+	int** matrixA;
+	int** matrixB;
 	if(fscanf(fp, "%d\t%d\n", &rowsA, &colsA)==EOF){
 		printf("\n");
 		exit(0);
 	}
-	//allocates space for and scans in matrixA
-	int** matrixA = malloc(rowsA*sizeof(int*));
-	for(int i = 0; i<rowsA; i++)
-		matrixA[i]=malloc(colsA*sizeof(int ));
-	for(int i = 0; i<rowsA; i++){
-		for(int j = 0; j<colsA; j++){
-			int num;
-			fscanf(fp, "%d", &num);
-			matrixA[i][j]=num;
-		}
-		fscanf(fp, "\n");
-	}
-	//allocates space for and scans in matrixB
+	matrixA = initializeMatrix(rowsA, colsA, fp);
 	fscanf(fp, "%d\t%d\n", &rowsB, &colsB);
-	int** matrixB = malloc(rowsB*sizeof(int*));
-	for(int i = 0; i<rowsB; i++)
-		matrixB[i]=malloc(colsB*sizeof(int ));
-	for(int i = 0; i<rowsB; i++){
-		for(int j = 0; j<colsB; j++){
-			int num;
-			fscanf(fp, "%d", &num);
-			matrixB[i][j]=num;
-		}
-		fscanf(fp, "\n");
-	}
+	matrixB = initializeMatrix(rowsB, colsB, fp);
 	multiply(matrixA, matrixB, rowsA, colsA, rowsB, colsB);
-	//frees matrixA and matrixB
 	cleanMatrix(matrixA, rowsA);
 	cleanMatrix(matrixB, rowsB);
 	fclose(fp);
-
 	return 0;
 }

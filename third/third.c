@@ -10,7 +10,27 @@ struct node{
 bool insert(int num, struct node** table);
 bool search(int num, struct node* *table);
 void cleanTable(struct node* table[]);
+struct node** makeTable(FILE*, struct node**);
 
+struct node** makeTable(FILE* fp, struct node** table){
+	char action;
+	int num;
+	while(fscanf(fp,"%c\n%d", &action, &num)!=EOF){
+		if(action=='i'){
+			if(insert(num,table))
+				printf("inserted\n");
+			else
+				printf("duplicate\n");
+		}
+		if(action == 's'){
+			if(search(num, table))
+				printf("present\n");
+			else
+				printf("absent\n");
+		}
+	}
+	return table;
+}
 
 bool insert(int num, struct node** table){
 	struct node* newNode = malloc(sizeof(struct node));
@@ -36,7 +56,7 @@ bool insert(int num, struct node** table){
 }
 
 bool search(int num, struct node** table){
-	
+
 	int hashNum = num%sizeof(table);
 	if(table[hashNum]==NULL)
 		return false;
@@ -47,7 +67,7 @@ bool search(int num, struct node** table){
 		else
 			temp=temp->next;
 	}
-	return false;	
+	return false;
 }
 
 void cleanTable(struct node** table){
@@ -68,23 +88,10 @@ int main(int argc, char**argv){
 	if(argc!=2)
 		return 0;
 	struct node** table = malloc(1000*sizeof(struct node));
+	for(int i = 0; i<1000; i++)
+		table[i] = NULL;
 	FILE* fp = fopen(argv[1], "r");
-	char action;
-	int num;
-	while(fscanf(fp,"%c\n%d", &action, &num)!=EOF){
-		if(action=='i'){
-			if(insert(num,table))
-				printf("inserted\n");
-			else
-				printf("duplicate\n");
-		}
-		if(action == 's'){
-			if(search(num, table))
-				printf("present\n");
-			else
-				printf("absent\n");
-		}
-	}
+	table = makeTable(fp, table);
 	cleanTable(table);
 	fclose(fp);
 	return 0;

@@ -1,7 +1,7 @@
-all:third
+all:third.exe
 
-third:third.c
-	gcc -g -Wall -Werror -fsanitize=address -std=c11 third.c -o third
+third.exe:third.c
+	gcc -g -Wall -Werror -std=c11 third.c -o third.exe
 
 clean:
-	rm -f third
+	rm -f third.exe

@@ -1,3 +1,9 @@
+/*
+This project reads in a series of instructions from a text file. It creates and
+maintains a binary tree. Each instruction will either insert, search for, or
+delete a node from the tree. It will then print the result (success or failure)
+of each instruction.
+*/
 #include<stdlib.h>
 #include<stdio.h>
 
@@ -13,9 +19,33 @@ int search(struct node*, int);
 struct node* delete(struct node*, int);
 void cleanTree(struct node*);
 struct node* delete(struct node*, int);
-struct node* replace(struct node*, struct node* prev);
+struct node* replace(struct node*, struct node*);
+struct node* initializeTree(FILE*, struct node*);
 
-//recursive method to find th node that the deleted node will be replaced with, and the node that will replace the that node, and so on
+//recursive method to find th node that the deleted node will be replaced with,
+//and the node that will replace the that node, and so on
+
+struct node* initializeTree(FILE* fp, struct node* head){
+	char action;
+	int val;
+	while(fscanf(fp, "%c\t%d\n", &action, &val)!=EOF){
+		if(action=='i'){
+			head = insert(head, val);
+		}
+		else if(action=='s'){
+
+			int ret = search(head, val);
+			if(ret == 0)
+				printf("absent\n");
+			else
+				printf("present %d\n", ret);
+		}
+		else if(action == 'd'){
+			head = delete(head, val);
+		}
+	}
+	return head;
+}
 struct node* replace(struct node* ptr, struct node* prev){
 		struct node* ptr2 = ptr->right;
 		struct node* prev2 = NULL;
@@ -45,11 +75,12 @@ struct node* replace(struct node* ptr, struct node* prev){
 				ptr2->right = ptr->right;
 		 		return ptr2;
 		 	}
-		 	else
+		 	else{
 		 		prev2->right = replace(ptr2, prev2);
 		 		ptr2->left = ptr->left;
 				ptr2->right = ptr->right;
 		 		return ptr2;
+			}
 		}
 }
 struct node* delete(struct node* head, int key){
@@ -185,28 +216,8 @@ int main(int argc,char** argv){
 		printf("error\n");
 		exit(0);
 	}
-	char action;
-	int val;
 	struct node* head = NULL;
-	
-	while(fscanf(fp, "%c\t%d\n", &action, &val)!=EOF){
-		
-		
-		if(action=='i'){
-			head = insert(head, val);
-		}
-		else if(action=='s'){
-			
-			int ret = search(head, val);
-			if(ret == 0)
-				printf("absent\n");
-			else
-				printf("present %d\n", ret);
-		}
-		else if(action == 'd'){
-			head = delete(head, val);
-		}
-	}
+	head = initializeTree(fp, head);
 	cleanTree(head);
 	fclose(fp);
 	return 0;
