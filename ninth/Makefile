@@ -1,7 +1,7 @@
-all: ninth
+all: ninth.exe
 
-ninth: ninth.c
-	gcc -g -Werror -Wall -fsanitize=address -std=c11 ninth.c -o ninth
+ninth.exe: ninth.c
+	gcc -g -Werror -Wall -std=c11 ninth.c -o ninth.exe
 
 clean:
-	rm -f ninth
+	rm -f ninth.exe

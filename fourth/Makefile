@@ -1,7 +1,7 @@
-all: fourth
+all: fourth.exe
 
-fourth: fourth.c
-	gcc -g -Werror -Wall -fsanitize=address -std=c11 fourth.c -o fourth
-	
+fourth.exe: fourth.c
+	gcc -g -Werror -Wall -std=c11 fourth.c -o fourth.exe
+
 clean:
-	rm -f fourth
+	rm -f fourth.exe
