@@ -1,2 +1,3 @@
 # Exploration-in-c
-A collection of small C projects
+This is a collection of short c projects I've completed for my schoolwork. 
+They are intended to demonstrate my ability to code in c. Enjoy!
